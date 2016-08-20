@@ -2,6 +2,10 @@ package com.example.roofit;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
@@ -27,30 +31,53 @@ public class AdapterHandler implements InvocationHandler {
         Type resObjectClassName = m.getGenericReturnType();
         String typeClass = resObjectClassName.toString().split("<")[1].split(">")[0];
 
-        Constructor constructor = m.getReturnType().getDeclaredConstructor(String.class, String.class, Class.class);
-        constructor.setAccessible(true);
-
-        return constructor.newInstance(queryPathParam(m, args), mBaseUrl, Class.forName(typeClass));
+        Annotation[] annotations = m.getAnnotations();
+        for (Annotation annotation : annotations) {
+            if (annotation instanceof GET){
+                Constructor constructor = m.getReturnType().getDeclaredConstructor(String.class, String.class, Class.class);
+                constructor.setAccessible(true);
+                return constructor.newInstance(queryUrl(m, args), mBaseUrl, Class.forName(typeClass));
+            } else if (annotation instanceof POST){
+                Constructor constructor = m.getReturnType().getDeclaredConstructor(String.class, String.class, String.class, Class.class);
+                constructor.setAccessible(true);
+                return constructor.newInstance(queryUrl(m, args), mBaseUrl, queryJsonParam(m, args), Class.forName(typeClass));
+            }
+        }
+        return null;
     }
 
-    private String queryPathParam(Method m, Object[] args) {
-        String actualUrl = getRawUrl(m);
+    private String queryUrl(Method m, Object[] args) {
+        Annotation[] annotations = m.getAnnotations();
+        for (Annotation annotation : annotations) {
+            if (annotation instanceof GET) {
+                return queryPathParam(((GET) annotation).url(), m, args);
+            } else if (annotation instanceof POST) {
+                return ((POST) annotation).url();
+            }
+        }
+        return null;
+    }
+
+    private String queryPathParam(String actualUrl, Method m, Object[] args) {
         actualUrl =  actualUrl.replace(" ", "");
-        Log.i(TAG, "queryPathParam: " +actualUrl);
         ArrayList<Param> params = getPathAnnotation(m, args);
         if (actualUrl != null) {
             for (Param param : params) {
-                actualUrl = actualUrl.replace("{" + param.name + "}", param.value);
+                actualUrl = actualUrl.replace("{" + param.name + "}", param.value.toString());
             }
         }
         return actualUrl;
     }
 
-    private String getRawUrl(Method m) {
-        Annotation[] annotations = m.getAnnotations();
-        for (Annotation annotation : annotations) {
-            if (annotation instanceof URL) {
-                return ((URL) annotation).url();
+    private String queryJsonParam(Method m, Object[] args){
+        if (args != null) {
+            Annotation[][] annotations = m.getParameterAnnotations();
+            for (int i = 0; i < args.length; i++) {
+                for (Annotation annotation : annotations[i]) {
+                    if (annotation instanceof ReqObject){
+                        return new Gson().toJson(args[i]);
+                    }
+                }
             }
         }
         return null;
@@ -62,8 +89,8 @@ public class AdapterHandler implements InvocationHandler {
         Annotation[][] parameterTypes = m.getParameterAnnotations();
         for (int i = 0; i < args.length; i++) {
             for (Annotation path : parameterTypes[i]) {
-                if (path instanceof PATH) {
-                    params.add(new Param(((PATH) path).value(), args[i].toString()));
+                if (path instanceof com.example.roofit.Param) {
+                    params.add(new Param(((com.example.roofit.Param) path).value(), args[i].toString()));
                 }
             }
         }
@@ -72,9 +99,9 @@ public class AdapterHandler implements InvocationHandler {
 
     private class Param {
         String name;
-        String value;
+        Object value;
 
-        Param(String name, String value) {
+        Param(String name, Object value) {
             this.name = name;
             this.value = value;
         }

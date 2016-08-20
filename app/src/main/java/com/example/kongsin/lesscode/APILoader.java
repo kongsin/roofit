@@ -1,8 +1,10 @@
 package com.example.kongsin.lesscode;
 
 import com.example.roofit.Caller;
-import com.example.roofit.URL;
-import com.example.roofit.PATH;
+import com.example.roofit.POST;
+import com.example.roofit.ReqObject;
+import com.example.roofit.GET;
+import com.example.roofit.Param;
 
 /**
  * Created by kongsin on 8/20/16.
@@ -10,9 +12,12 @@ import com.example.roofit.PATH;
 
 public interface APILoader {
 
-    @URL(url = "/catalog/1044/books?c=TH")
+    @GET(url = "/catalog/1044/books?c=TH")
     Caller<A> loadData();
 
-    @URL(url = "/book/{id}/{name}")
-    Caller<A> getDetail(@PATH("id") String id, @PATH("name") String name);
+    @POST(url = "/book")
+    Caller<A> getDetail(@ReqObject A reqObject);
+
+    @POST(url = "/book")
+    Caller<B> loadPost(@ReqObject A reqObject);
 }

@@ -6,11 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by kongsin on 8/21/16.
+ * Created by kongsin on 8/20/16.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
-
-public @interface PATH {
-    String value() default "";
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
+public @interface POST {
+    String url();
 }
