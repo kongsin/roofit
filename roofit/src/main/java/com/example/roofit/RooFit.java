@@ -1,4 +1,4 @@
-package com.example.kongsin.lesscode;
+package com.example.roofit;
 
 import java.lang.reflect.Proxy;
 
@@ -8,7 +8,7 @@ import java.lang.reflect.Proxy;
 
 public class RooFit {
     public <T> T create(Class<T> interfaceClass, String baseUrl){
-        return (T) Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[]{interfaceClass}, new MyHandler(baseUrl));
+        return (T) Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[]{interfaceClass}, new AdapterHandler(baseUrl));
     }
 }
 

@@ -1,49 +1,43 @@
-package com.example.kongsin.lesscode;
+package com.example.roofit;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 /**
  * Created by kongsin on 8/20/16.
  */
 
-public class CallReq<T> {
+public class Caller<T> {
 
     private String mUrl;
     private String mBaseUrl;
-    private Call mCall;
+    private okhttp3.Call mCall;
     private Object mConverterObject;
     private Class<T> mTypeClass;
-    private static final String TAG = "CallReq";
+    private static final String TAG = "Caller";
 
-    private CallReq(String url, String baseUrl, Class<T> typeClass) {
+    private Caller(String url, String baseUrl, Class<T> typeClass) {
         this.mUrl = url;
         this.mBaseUrl = baseUrl;
         this.mTypeClass = typeClass;
     }
 
     public void enqueue(final RooFitCallBack callback) {
-        OkHttpClient client = new OkHttpClient();
-        Request.Builder builder = new Request.Builder();
+        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+        okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
         builder.url(mBaseUrl + mUrl);
-        final Request request = builder.build();
+        final okhttp3.Request request = builder.build();
         mCall = client.newCall(request);
-        mCall.enqueue(new Callback() {
+        mCall.enqueue(new okhttp3.Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(okhttp3.Call call, IOException e) {
                 if (callback != null) callback.onFailed(e.getMessage());
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
                 String res = response.body().string();
                 if (mConverterObject != null && mConverterObject instanceof com.google.gson.Gson) {
                     if (callback != null) {
@@ -66,7 +60,7 @@ public class CallReq<T> {
         this.mConverterObject = gsonConverter;
     }
 
-    public void cancelRequest() {
+    public void cancel() {
         if (mCall != null && mCall.isExecuted() && !mCall.isCanceled()) {
             mCall.cancel();
         }

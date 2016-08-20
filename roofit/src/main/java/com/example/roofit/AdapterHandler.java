@@ -1,6 +1,4 @@
-package com.example.kongsin.lesscode;
-
-import android.util.Log;
+package com.example.roofit;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -12,11 +10,11 @@ import java.lang.reflect.Type;
  * Created by kongsin on 8/20/16.
  */
 
-public class MyHandler implements InvocationHandler {
-    private static final String TAG = "MyHandler";
+public class AdapterHandler implements InvocationHandler {
+    private static final String TAG = "AdapterHandler";
     private String mBaseUrl;
 
-    public MyHandler(String baseUrl) {
+    public AdapterHandler(String baseUrl) {
         this.mBaseUrl = baseUrl;
     }
 
@@ -30,8 +28,8 @@ public class MyHandler implements InvocationHandler {
         constructor.setAccessible(true);
         Annotation[] annotations = m.getAnnotations();
         for (Annotation annotation : annotations) {
-            if (annotation instanceof URL) {
-                returnObject = constructor.newInstance(((URL) annotation).url(), mBaseUrl, Class.forName(typeClass));
+            if (annotation instanceof GET) {
+                returnObject = constructor.newInstance(((GET) annotation).url(), mBaseUrl, Class.forName(typeClass));
             }
         }
         return returnObject;

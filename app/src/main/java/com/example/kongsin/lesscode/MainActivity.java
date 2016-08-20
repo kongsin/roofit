@@ -4,6 +4,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.roofit.Caller;
+import com.example.roofit.RooFit;
+import com.google.gson.Gson;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     @Override
@@ -12,12 +16,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         RooFit myFit = new RooFit();
         APILoader loader = myFit.create(APILoader.class, "http://me-catalogsvc.azurewebsites.net/");
-        CallReq<A> call = loader.loadData();
-        //call.setObjectConverter(new Gson());
-        call.enqueue(new CallReq.RooFitCallBack() {
+        Caller<A> call = loader.loadData();
+        call.setObjectConverter(new Gson());
+        call.enqueue(new Caller.RooFitCallBack() {
             @Override
             public void onResponse(Object object) {
-                Log.i(TAG, "onResponse: " + object.toString());
+                Log.i(TAG, "onResponse: " + ((A) object).getName());
             }
 
             @Override

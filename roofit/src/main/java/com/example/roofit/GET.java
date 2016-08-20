@@ -1,4 +1,4 @@
-package com.example.kongsin.lesscode;
+package com.example.roofit;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
-public @interface URL {
+public @interface GET {
     String url();
 }
