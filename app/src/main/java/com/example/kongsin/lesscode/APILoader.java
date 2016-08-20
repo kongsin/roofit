@@ -13,6 +13,6 @@ public interface APILoader {
     @GET(url = "/catalog/1044/books?c=TH")
     Caller<A> loadData();
 
-    @GET(url = "/book/{id}")
-    Caller<A> getDetail(@PATH("id") String id);
+    @GET(url = "/book/{id}/{name}")
+    Caller<A> getDetail(@PATH("id") String id, @PATH("name") String name);
 }

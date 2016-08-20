@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Caller<A> call = loader.getDetail("a716efbe-f77f-4785-a7a5-f6458e1dba61");
+        Caller<A> call = loader.getDetail("a716efbe-f77f-4785-a7a5-f6458e1dba61","kongsin");
         //call.setObjectConverter(new Gson());
         call.enqueue(new Caller.RooFitCallBack() {
             @Override
