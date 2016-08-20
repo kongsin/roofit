@@ -67,7 +67,7 @@ public class AdapterHandler implements InvocationHandler {
         return params;
     }
 
-    class Param {
+    private class Param {
         String name;
         String value;
 
