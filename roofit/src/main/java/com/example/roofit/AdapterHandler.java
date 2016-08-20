@@ -35,6 +35,8 @@ public class AdapterHandler implements InvocationHandler {
 
     private String queryPathParam(Method m, Object[] args) {
         String actualUrl = getRawUrl(m);
+        actualUrl =  actualUrl.replace(" ", "");
+        Log.i(TAG, "queryPathParam: " +actualUrl);
         ArrayList<Param> params = getPathAnnotation(m, args);
         if (actualUrl != null) {
             for (Param param : params) {
@@ -59,10 +61,8 @@ public class AdapterHandler implements InvocationHandler {
         if (args == null) return params;
         Annotation[][] parameterTypes = m.getParameterAnnotations();
         for (int i = 0; i < args.length; i++) {
-            Log.i(TAG, "getPathAnnotation: " + args[i]);
             for (Annotation path : parameterTypes[i]) {
                 if (path instanceof PATH) {
-                    Log.i(TAG, "getPathAnnotation: " + ((PATH) path).value());
                     params.add(new Param(((PATH) path).value(), args[i].toString()));
                 }
             }
