@@ -49,8 +49,8 @@ public class AdapterHandler implements InvocationHandler {
     private String getRawUrl(Method m) {
         Annotation[] annotations = m.getAnnotations();
         for (Annotation annotation : annotations) {
-            if (annotation instanceof GET) {
-                return ((GET) annotation).url();
+            if (annotation instanceof URL) {
+                return ((URL) annotation).url();
             }
         }
         return null;
