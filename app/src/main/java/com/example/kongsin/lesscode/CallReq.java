@@ -1,8 +1,5 @@
 package com.example.kongsin.lesscode;
 
-
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
