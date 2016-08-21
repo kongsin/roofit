@@ -8,7 +8,7 @@ import java.lang.reflect.Proxy;
 
 public class RooFit {
     public <T> T create(Class<T> interfaceClass, String baseUrl){
-        return (T) Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[]{interfaceClass}, new AdapterHandler(baseUrl));
+        return (T) Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[]{interfaceClass}, new MethodManager(baseUrl));
     }
 }
 

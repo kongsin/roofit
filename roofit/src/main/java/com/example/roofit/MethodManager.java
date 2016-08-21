@@ -12,11 +12,11 @@ import java.util.ArrayList;
  * Created by kongsin on 8/20/16.
  */
 
-public class AdapterHandler implements InvocationHandler {
-    private static final String TAG = "AdapterHandler";
+class MethodManager implements InvocationHandler {
+    private static final String TAG = "MethodManager";
     private String mBaseUrl;
 
-    public AdapterHandler(String baseUrl) {
+    public MethodManager(String baseUrl) {
         this.mBaseUrl = baseUrl;
     }
 
