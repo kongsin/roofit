@@ -108,7 +108,7 @@ public class Caller<T> {
         }
     }
 
-    public void setViewAs(ReturnAs returnAs) {
+    public void setReturnAs(ReturnAs returnAs) {
         this.mReturnAs = returnAs;
     }
 

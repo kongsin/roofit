@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.example.roofit.Caller;
 import com.example.roofit.RooFit;
-import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -22,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         a.lastName = "Pansansou";
         a.age = "20";
         Caller<B> loadPost = loader.loadPost(a);
+        loadPost.setReturnAs(Caller.ReturnAs.OBJECT);
         loadPost.enqueuePost(new Caller.RooFitCallBack() {
             @Override
             public void onResponse(Object object) {
