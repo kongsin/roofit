@@ -1,11 +1,6 @@
 package com.example.roofit;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
-
-import org.json.JSONObject;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
