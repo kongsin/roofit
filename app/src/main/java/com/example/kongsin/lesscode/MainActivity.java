@@ -15,14 +15,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         RooFit myFit = new RooFit();
-        APILoader loader = myFit.create(APILoader.class, "http://me-catalogsvc.azurewebsites.net/");
+        APILoader loader = myFit.create(APILoader.class, "http://httpbin.org");
 
         A a = new A();
         a.name = "Kongsin";
         a.lastName = "Pansansou";
         a.age = "20";
-        Caller<A> loadPost = loader.getDetail(a);
-        loadPost.enqueue(new Caller.RooFitCallBack() {
+        Caller<B> loadPost = loader.loadPost(a);
+        loadPost.enqueuePost(new Caller.RooFitCallBack() {
             @Override
             public void onResponse(Object object) {
                 Log.i(TAG, "onResponse: " + object);

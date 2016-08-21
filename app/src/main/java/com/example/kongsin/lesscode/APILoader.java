@@ -18,6 +18,6 @@ public interface APILoader {
     @POST(url = "/book")
     Caller<A> getDetail(@ReqObject A reqObject);
 
-    @POST(url = "/book")
+    @POST(url = "/post")
     Caller<B> loadPost(@ReqObject A reqObject);
 }
