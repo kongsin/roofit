@@ -27,11 +27,16 @@ public class Caller<T> {
     private String mUrl;
     private String mBaseUrl;
     private okhttp3.Call mCall;
-    private Object mConverterObject;
+    private Gson mConverterObject;
     private Class<T> mTypeClass;
     private static final String TAG = "Caller";
     private RooFitCallBack mCallBack;
     private String mRequestJson;
+    private ReturnAs mReturnAs = ReturnAs.STRING;
+
+    public enum ReturnAs {
+        STRING, OBJECT
+    }
 
     private Callback mOkhttpCallback = new Callback() {
         @Override
@@ -42,18 +47,22 @@ public class Caller<T> {
         @Override
         public void onResponse(Call call, Response response) throws IOException {
             String res = response.body().string();
-            if (mConverterObject != null && mConverterObject instanceof com.google.gson.Gson) {
-                if (mCallBack != null) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(res);
-                        T t = ((com.google.gson.Gson) mConverterObject).fromJson(jsonObject.toString(), mTypeClass);
-                        mCallBack.onResponse(t);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+            switch (mReturnAs) {
+                case STRING:
+                    mCallBack.onResponse(res);
+                    break;
+                case OBJECT:
+                    if (mCallBack != null) {
+                        try {
+                            mConverterObject = new Gson();
+                            JSONObject jsonObject = new JSONObject(res);
+                            T t = mConverterObject.fromJson(jsonObject.toString(), mTypeClass);
+                            mCallBack.onResponse(t);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            } else {
-                mCallBack.onResponse(res);
+                    break;
             }
         }
     };
@@ -75,7 +84,7 @@ public class Caller<T> {
         this.mRequestJson = requestJson;
     }
 
-    public void enqueue(final RooFitCallBack callback) {
+    public void enqueue(final RooFitCallBack<T> callback) {
         this.mCallBack = callback;
         mBuilder.url(mBaseUrl + mUrl);
         Request request = mBuilder.build();
@@ -83,13 +92,13 @@ public class Caller<T> {
         mCall.enqueue(mOkhttpCallback);
     }
 
-    public void enqueuePost(RooFitCallBack callBack) {
+    public void enqueuePost(RooFitCallBack<T> callBack) {
         this.mCallBack = callBack;
         try {
             JSONObject jsonObject = new JSONObject(mRequestJson);
             RequestBody body = RequestBody.create(JSON, jsonObject.toString());
             Request request = new Request.Builder()
-                    .url(mBaseUrl+mUrl)
+                    .url(mBaseUrl + mUrl)
                     .post(body)
                     .build();
             mCall = mClient.newCall(request);
@@ -99,8 +108,8 @@ public class Caller<T> {
         }
     }
 
-    public void setObjectConverter(Gson gsonConverter) {
-        this.mConverterObject = gsonConverter;
+    public void setViewAs(ReturnAs returnAs) {
+        this.mReturnAs = returnAs;
     }
 
     public void cancel() {
