@@ -1,5 +1,7 @@
 package com.example.roofit;
 
+import android.app.Dialog;
+
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -33,6 +35,7 @@ public class Caller<T> {
     private RooFitCallBack mCallBack;
     private String mRequestJson;
     private ReturnAs mReturnAs = ReturnAs.STRING;
+    private Dialog mDialog;
 
     public enum ReturnAs {
         STRING, OBJECT
@@ -41,11 +44,13 @@ public class Caller<T> {
     private Callback mOkhttpCallback = new Callback() {
         @Override
         public void onFailure(Call call, IOException e) {
+            hideProgressDialog();
             if (mCallBack != null) mCallBack.onFailed(e.getMessage());
         }
 
         @Override
         public void onResponse(Call call, Response response) throws IOException {
+            hideProgressDialog();
             String res = response.body().string();
             switch (mReturnAs) {
                 case STRING:
@@ -84,7 +89,24 @@ public class Caller<T> {
         this.mRequestJson = requestJson;
     }
 
+    public void showDialog(Dialog progressDialog){
+        this.mDialog = progressDialog;
+    }
+
+    private void showProgressDialog(){
+        if (this.mDialog != null && !this.mDialog.isShowing()) {
+            this.mDialog.show();
+        }
+    }
+
+    private void hideProgressDialog(){
+        if (this.mDialog != null && this.mDialog.isShowing()){
+            this.mDialog.dismiss();
+        }
+    }
+
     public void enqueue(final RooFitCallBack<T> callback) {
+        showProgressDialog();
         this.mCallBack = callback;
         mBuilder.url(mBaseUrl + mUrl);
         Request request = mBuilder.build();
@@ -95,6 +117,7 @@ public class Caller<T> {
     public void enqueuePost(RooFitCallBack<T> callBack) {
         this.mCallBack = callBack;
         try {
+            showProgressDialog();
             JSONObject jsonObject = new JSONObject(mRequestJson);
             RequestBody body = RequestBody.create(JSON, jsonObject.toString());
             Request request = new Request.Builder()
@@ -105,6 +128,7 @@ public class Caller<T> {
             mCall.enqueue(mOkhttpCallback);
         } catch (JSONException e) {
             e.printStackTrace();
+            hideProgressDialog();
         }
     }
 
