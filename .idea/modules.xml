@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://C:\Users\kongsin\AndroidStudioProjects\roofit\LessCode.iml" filepath="C:\Users\kongsin\AndroidStudioProjects\roofit\LessCode.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\kongsin\AndroidStudioProjects\roofit\app\app.iml" filepath="C:\Users\kongsin\AndroidStudioProjects\roofit\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/roofit.iml" filepath="$PROJECT_DIR$/roofit.iml" />
       <module fileurl="file://C:\Users\kongsin\AndroidStudioProjects\roofit\roofit\roofit.iml" filepath="C:\Users\kongsin\AndroidStudioProjects\roofit\roofit\roofit.iml" />
       <module fileurl="file://$PROJECT_DIR$/roofit/roofit-roofit.iml" filepath="$PROJECT_DIR$/roofit/roofit-roofit.iml" />

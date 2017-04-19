@@ -3,7 +3,9 @@ package com.kongsin.lesscode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.kongsin.kongsin.lesscode.R;
 import com.kongsin.roofit.Caller;
 import com.kongsin.roofit.RooFit;
@@ -24,10 +26,16 @@ public class MainActivity extends AppCompatActivity {
         loadPost.setRootNode("data");
         loadPost.enqueuePost(new Caller.RooFitCallBack<B>() {
             @Override
-            public void onResponse(B object) {
+            public void onResponse(final B object) {
                 Log.i(TAG, "onResponse: " + object.getName());
                 Log.i(TAG, "onResponse: " + object.getLastName());
                 Log.i(TAG, "onResponse: " + object.getAge());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TextView)findViewById(R.id.text)).setText(new Gson().toJson(object));
+                    }
+                });
             }
 
             @Override
