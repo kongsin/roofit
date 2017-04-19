@@ -1,4 +1,4 @@
-package com.example.roofit;
+package com.kongsin.lesscode;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.roofit.test", appContext.getPackageName());
+        assertEquals("com.example.kongsin.lesscode", appContext.getPackageName());
     }
 }

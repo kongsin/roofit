@@ -1,4 +1,4 @@
-package com.example.roofit;
+package com.kongsin.roofit;
 
 import com.google.gson.Gson;
 

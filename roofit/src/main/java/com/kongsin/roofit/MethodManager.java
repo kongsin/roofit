@@ -1,4 +1,4 @@
-package com.example.roofit;
+package com.kongsin.roofit;
 
 import com.google.gson.Gson;
 import java.lang.annotation.Annotation;
@@ -84,8 +84,8 @@ class MethodManager implements InvocationHandler {
         Annotation[][] parameterTypes = m.getParameterAnnotations();
         for (int i = 0; i < args.length; i++) {
             for (Annotation path : parameterTypes[i]) {
-                if (path instanceof com.example.roofit.Param) {
-                    params.add(new Param(((com.example.roofit.Param) path).value(), args[i].toString()));
+                if (path instanceof com.kongsin.roofit.Param) {
+                    params.add(new Param(((com.kongsin.roofit.Param) path).value(), args[i].toString()));
                 }
             }
         }
