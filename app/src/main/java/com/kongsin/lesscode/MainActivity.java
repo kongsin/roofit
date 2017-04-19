@@ -23,9 +23,9 @@ public class MainActivity extends AppCompatActivity {
         a.age = "20";
         Caller<B> loadPost = loader.loadPost(a);
         loadPost.setReturnAs(Caller.ReturnAs.OBJECT);
-        loadPost.enqueuePost(new Caller.RooFitCallBack() {
+        loadPost.enqueuePost(new Caller.RooFitCallBack<B>() {
             @Override
-            public void onResponse(Object object) {
+            public void onResponse(B object) {
                 Log.i(TAG, "onResponse: " + object);
             }
 
