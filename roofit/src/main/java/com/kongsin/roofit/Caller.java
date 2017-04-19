@@ -1,5 +1,7 @@
 package com.kongsin.roofit;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -27,15 +29,14 @@ public class Caller<T> {
     private String mUrl;
     private String mBaseUrl;
     private okhttp3.Call mCall;
-    private Gson mConverterObject;
     private Class<T> mTypeClass;
     private static final String TAG = "Caller";
-    private RooFitCallBack mCallBack;
+    private RooFitCallBack<T> mCallBack;
     private String mRequestJson;
-    private ReturnAs mReturnAs = ReturnAs.STRING;
+    private String mRootNode;
 
-    public enum ReturnAs {
-        STRING, OBJECT
+    public void setRootNode(String rootNode) {
+        mRootNode = rootNode;
     }
 
     private Callback mOkhttpCallback = new Callback() {
@@ -47,22 +48,20 @@ public class Caller<T> {
         @Override
         public void onResponse(Call call, Response response) throws IOException {
             String res = response.body().string();
-            switch (mReturnAs) {
-                case STRING:
-                    mCallBack.onResponse(res);
-                    break;
-                case OBJECT:
-                    if (mCallBack != null) {
-                        try {
-                            mConverterObject = new Gson();
-                            JSONObject jsonObject = new JSONObject(res);
-                            T t = mConverterObject.fromJson(jsonObject.toString(), mTypeClass);
-                            mCallBack.onResponse(t);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+            if (mCallBack != null) {
+                try {
+                    Gson mConverterObject = new Gson();
+                    JSONObject jsonObject = new JSONObject(res);
+                    if (!TextUtils.isEmpty(mRootNode)){
+                        T t = mConverterObject.fromJson(jsonObject.get(mRootNode).toString(), mTypeClass);
+                        mCallBack.onResponse(t);
+                    } else {
+                        T t = mConverterObject.fromJson(jsonObject.toString(), mTypeClass);
+                        mCallBack.onResponse(t);
                     }
-                    break;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     };
@@ -106,10 +105,6 @@ public class Caller<T> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setReturnAs(ReturnAs returnAs) {
-        this.mReturnAs = returnAs;
     }
 
     public void cancel() {

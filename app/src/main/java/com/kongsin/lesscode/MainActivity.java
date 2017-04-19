@@ -22,11 +22,13 @@ public class MainActivity extends AppCompatActivity {
         a.lastName = "Pansansou";
         a.age = "20";
         Caller<B> loadPost = loader.loadPost(a);
-        loadPost.setReturnAs(Caller.ReturnAs.OBJECT);
+        loadPost.setRootNode("data");
         loadPost.enqueuePost(new Caller.RooFitCallBack<B>() {
             @Override
             public void onResponse(B object) {
-                Log.i(TAG, "onResponse: " + object);
+                Log.i(TAG, "onResponse: " + object.getName());
+                Log.i(TAG, "onResponse: " + object.getLastName());
+                Log.i(TAG, "onResponse: " + object.getAge());
             }
 
             @Override
