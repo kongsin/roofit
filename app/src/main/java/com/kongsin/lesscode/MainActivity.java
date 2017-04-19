@@ -14,8 +14,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RooFit myFit = new RooFit();
-        APILoader loader = myFit.create(APILoader.class, "http://httpbin.org");
+        APILoader loader = RooFit.create(APILoader.class, "http://httpbin.org");
 
         A a = new A();
         a.name = "Kongsin";
